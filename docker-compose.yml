@@ -1,0 +1,28 @@
+version: '3'
+volumes:
+  data-volume:
+services:
+  web:
+    build: .
+    environment:
+      - DATABASE_PASSWORD=password
+    volumes:
+      - ".:/app"
+    ports:
+      - "3000:3000"
+    tty: true
+    stdin_open: true
+    depends_on:
+      - db
+    links:
+      - db
+  db:
+    platform: linux/amd64
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: root
+    volumes:
+      - "data-volume:/var/lib/mysql"
+    ports:
+      - "3306:3306"
